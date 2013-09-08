@@ -1,15 +1,17 @@
 require 'formula'
 
 class Grc < Formula
-  homepage 'https://github.com/pengwynn/grc'
-  url 'https://github.com/pengwynn/grc/tarball/master'
-  md5 '3b512f31675771eb961251f632452288'
-  version '1.4'
+  homepage 'http://github.com/sabril/homebrew-grc'
+  url 'http://fossies.org/linux/privat/grc_1.5.tar.gz'
+  sha1 'bcbe45992d2c4cb1d33e76aac6aa79b448124ce2'
+
+  depends_on :python
 
   def install
     #TODO we should deprefixify since it's python and thus possible
     inreplace ['grc', 'grc.1'], '/etc', etc
     inreplace ['grcat', 'grcat.1'], '/usr/local', prefix
+    inreplace ['grc', 'grcat'], '#! /usr/bin/python', '#!/usr/bin/env python'
 
     etc.install 'grc.conf'
     bin.install %w[grc grcat]
@@ -21,7 +23,7 @@ class Grc < Formula
 
   def rc_script; <<-EOS.undent
     GRC=`which grc`
-    if [ "$TERM" != dumb ] && [ -n GRC ]
+    if [ "$TERM" != dumb ] && [ -n "$GRC" ]
     then
         alias colourify="$GRC -es --colour=auto"
         alias configure='colourify ./configure'
